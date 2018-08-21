@@ -5,9 +5,18 @@ https://rawgit.com/MycroftAI/mycroft-skills/master/meta_editor.html
 ## HomeSeer-Mycroft
 HomeSeer hub integration for Mycroft Voice Assistant
 
+## Configuration
+Add the block below to your `mycroft.conf` file:
+
+```json
+  "HomeSeerSkill" : {
+	"url": "HomeSeer server local IP"
+}
+```
+
+Restart Mycroft for the changes to take effect.
+
 ## Description 
-A more verbose description, including any extra instructions or
-information that didn't fit in the one line.
 
 ## Examples 
 
