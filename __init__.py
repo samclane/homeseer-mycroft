@@ -63,7 +63,6 @@ class HomeSeerSkill(MycroftSkill):
     @intent_handler(IntentBuilder("").require("GetStatus").require("Detail"))
     def handle_get_status_intent(self, message):
         detail = message.data["Detail"]
-
         device: Device = self.get_device_by_attributes(detail)
         status_json = self.hs.get_status(device.ref, device.location, device.location2)
         status_string = status_json["status"]
