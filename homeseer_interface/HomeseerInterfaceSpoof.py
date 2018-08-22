@@ -1,5 +1,5 @@
 from .HomeseerInterface import HomeseerInterface, HomeSeerCommandException
-
+from mycroft.util.log import LOG
 
 class HomeseerInterfaceSpoof(HomeseerInterface):
     def __init__(self, *args):
@@ -60,7 +60,7 @@ class HomeseerInterfaceSpoof(HomeseerInterface):
         }
 
     def _send_command(self, url: str):
-        pass
+        LOG.info("Calling {}".format(url))
 
     def get_status(self, ref="", location="", location2=""):
         if len(ref):
