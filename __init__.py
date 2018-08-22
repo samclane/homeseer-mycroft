@@ -74,6 +74,10 @@ class HomeSeerSkill(MycroftSkill):
         self.speak_dialog('DeviceStatus', {'name': device.name,
                                            'value': status_string})
 
+    @intent_handler(IntentBuilder("").require("VerySpecificTrigger"))
+    def handle_specific_intent(self, message):
+        self.speak_dialog('VerySpecificResponse')
+
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
     # is extremely simple, there is no need to override it.  If you DO
