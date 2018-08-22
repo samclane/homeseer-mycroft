@@ -64,11 +64,14 @@ class HomeSeerSkill(MycroftSkill):
     def handle_get_status_intent(self, message):
         detail = message.data["Detail"]
         device: Device = self.get_device_by_attributes(detail)
-        status_json = self.hs.get_status(device.ref, device.location, device.location2)
-        status_string = status_json["status"]
+        try:
+            status_json = self.hs.get_status(device.ref, device.location, device.location2)
+            status_string = status_json["status"]
 
-        self.speak_dialog('DeviceStatus', {'name': device.name,
-                                           'value': status_string})
+            self.speak_dialog('DeviceStatus', {'name': device.name,
+                                               'value': status_string})
+        except HomeSeerCommandException as e:
+            self.speak_dialog('Error', {'exception': str(e)})
 
     @intent_handler(IntentBuilder("").require("ToggleSetting").require("Detail"))
     def handle_turn_setting_intent(self, message):
