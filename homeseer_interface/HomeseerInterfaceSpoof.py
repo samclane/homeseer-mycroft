@@ -69,9 +69,9 @@ class HomeseerInterfaceSpoof(HomeseerInterface):
         if len(ref) > 0:
             url += "&ref={}".format(ref)
         if len(location) > 0:
-            url += "&location1={}".format(location)
+            url += "&location1=\"{}\"".format(location)
         if len(location2) > 0:
-            url += "&location2={}".format(location2)
+            url += "&location2=\"{}\"".format(location2)
         response = self._send_command(url)
 
         if len(ref):
@@ -88,12 +88,12 @@ class HomeseerInterfaceSpoof(HomeseerInterface):
         return response
 
     def control_by_label(self, deviceref: int, label: str):
-        url = self.url + "request=controldevicebylabel&ref={}&label={}".format(str(deviceref), label)
+        url = self.url + "request=controldevicebylabel&ref={}&label=\"{}\"".format(str(deviceref), label)
         response = self._send_command(url)
         return response
 
     def run_event_by_group(self, group_name: str, event_name: str):
-        url = self.url + "request=runevent&group={}&name={}".format(group_name, event_name)
+        url = self.url + "request=runevent&group=\"{}\"&name=\"{}\"".format(group_name, event_name)
         response = self._send_command(url)
         return response
 
