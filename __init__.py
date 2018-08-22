@@ -41,7 +41,7 @@ class HomeSeerSkill(MycroftSkill):
         # Get HomeSeer devices from status query
         try:
             for d in self.hs.get_status()["Devices"]:
-                self.device_list.append(Device(d["ref"], d["name"], d["location"], d["location2"]))
+                self.device_list.append(Device(str(d["ref"]), d["name"], d["location"], d["location2"]))
         except HomeSeerCommandException:
             self.log.warning("Unable to connect to HomeSeer. Shutting down.")
             self.shutdown()
