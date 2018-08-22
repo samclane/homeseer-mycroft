@@ -1,6 +1,7 @@
 from .HomeseerInterface import HomeseerInterface, HomeSeerCommandException
 from mycroft.util.log import LOG
 
+
 class HomeseerInterfaceSpoof(HomeseerInterface):
     def __init__(self, *args):
         super().__init__(*args)
@@ -61,8 +62,18 @@ class HomeseerInterfaceSpoof(HomeseerInterface):
 
     def _send_command(self, url: str):
         LOG.info("Calling {}".format(url))
+        return "OK"
 
     def get_status(self, ref="", location="", location2=""):
+        url = self.url + "request=getstatus"
+        if len(ref) > 0:
+            url += "&ref={}".format(ref)
+        if len(location) > 0:
+            url += "&location1={}".format(location)
+        if len(location2) > 0:
+            url += "&location2={}".format(location2)
+        response = self._send_command(url)
+
         if len(ref):
             for d in self._status["Devices"]:
                 if d["ref"] == int(ref):
@@ -72,13 +83,21 @@ class HomeseerInterfaceSpoof(HomeseerInterface):
             return self._status
 
     def control_by_value(self, deviceref: int, value: float):
-        pass
+        url = self.url + "/JSON?request=controldevicebyvalue&ref={}&value={}".format(str(deviceref), str(value))
+        response = self._send_command(url)
+        return response
 
     def control_by_label(self, deviceref: int, label: str):
-        pass
+        url = self.url + "request=controldevicebylabel&ref={}&label={}".format(str(deviceref), label)
+        response = self._send_command(url)
+        return response
 
     def run_event_by_group(self, group_name: str, event_name: str):
-        pass
+        url = self.url + "request=runevent&group={}&name={}".format(group_name, event_name)
+        response = self._send_command(url)
+        return response
 
     def run_event_by_event_id(self, event_id):
-        pass
+        url = self.url + "request=runevent&id={}".format(str(event_id))
+        response = self._send_command(url)
+        return response

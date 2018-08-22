@@ -1,5 +1,6 @@
 import requests
 
+
 class HomeSeerCommandException(Exception):
     pass
 
@@ -31,7 +32,8 @@ class HomeseerInterface:
             url += "&location1={}".format(location)
         if len(location2) > 0:
             url += "&location2={}".format(location2)
-        return self._send_command(url)
+        response = self._send_command(url)
+        return response
 
     def control_by_value(self, deviceref: int, value: float):
         url = self.url + "/JSON?request=controldevicebyvalue&ref={}&value={}".format(str(deviceref), str(value))
