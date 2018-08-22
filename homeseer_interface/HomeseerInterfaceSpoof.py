@@ -82,12 +82,12 @@ class HomeseerInterfaceSpoof(HomeseerInterface):
         else:
             return self._status
 
-    def control_by_value(self, deviceref: int, value: float):
+    def control_by_value(self, deviceref, value: float):
         url = self.url + "/JSON?request=controldevicebyvalue&ref={}&value={}".format(str(deviceref), str(value))
         response = self._send_command(url)
         return response
 
-    def control_by_label(self, deviceref: int, label: str):
+    def control_by_label(self, deviceref, label: str):
         url = self.url + "request=controldevicebylabel&ref={}&label=\"{}\"".format(str(deviceref), label)
         response = self._send_command(url)
         return response

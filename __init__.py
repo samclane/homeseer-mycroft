@@ -62,7 +62,6 @@ class HomeSeerSkill(MycroftSkill):
 
     @intent_handler(IntentBuilder("").require("Detail"))
     def handle_get_status_intent(self, message):
-        self.log.info("Calling <handle_get_status_intent>...")
         detail = message.data["Detail"]
         self.log.info("Getting status for {}...".format(detail))
         device: Device = self.get_device_by_attributes(detail)
@@ -74,6 +73,12 @@ class HomeSeerSkill(MycroftSkill):
         self.speak_dialog('DeviceStatus', {'name': device.name,
                                            'value': status_string})
 
+    @intent_handler(IntentBuilder("").require("ToggleSetting").require("Detail"))
+    def handle_turn_setting_intent(self, message):
+        detail = message.data["Detail"]
+        setting = message.data["ToggleSetting"]
+        device: Device = self.get_device_by_attributes(detail)
+        self.hs.control_by_label(device.ref, setting)
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
