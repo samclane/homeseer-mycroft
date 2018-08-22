@@ -96,6 +96,8 @@ class HomeSeerSkill(MycroftSkill):
         setting = message.data["ToggleSetting"]
         self.log.info("Setting ALL details {} to {}".format(detail, setting))
         root_device: Device = self.get_device_by_attributes(detail)
+        self.speak_dialog('ToggleSingle', {'setting': setting,
+                                           'name': root_device.name})
         devices = self.get_devices_by_attribute(root_device, 'name')
         for d in devices:
             try:
