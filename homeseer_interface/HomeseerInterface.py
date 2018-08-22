@@ -1,6 +1,5 @@
 import requests
 
-
 class HomeSeerCommandException(Exception):
     pass
 
@@ -8,8 +7,10 @@ class HomeSeerCommandException(Exception):
 class HomeseerInterface:
     TIMEOUT = 2
 
-    def __init__(self, url):
-        self.url = url
+    def __init__(self, url, user=None, password=None):
+        self.url = url + "/JSON?"
+        if user:
+            self.url += "user={}&pass={}&".format(user, password)
 
     def _send_command(self, url: str):
         try:
@@ -23,7 +24,7 @@ class HomeseerInterface:
         return website.json()
 
     def get_status(self, ref="", location="", location2=""):
-        url = self.url + "/JSON?request=getstatus"
+        url = self.url + "request=getstatus"
         if len(ref) > 0:
             url += "&ref={}".format(ref)
         if len(location) > 0:
@@ -38,16 +39,16 @@ class HomeseerInterface:
         return response
 
     def control_by_label(self, deviceref: int, label: str):
-        url = self.url + "/JSON?request=controldevicebylabel&ref={}&label={}".format(str(deviceref), label)
+        url = self.url + "request=controldevicebylabel&ref={}&label={}".format(str(deviceref), label)
         response = self._send_command(url)
         return response
 
     def run_event_by_group(self, group_name: str, event_name: str):
-        url = self.url + "/JSON?request=runevent&group={}&name={}".format(group_name, event_name)
+        url = self.url + "request=runevent&group={}&name={}".format(group_name, event_name)
         response = self._send_command(url)
         return response
 
     def run_event_by_event_id(self, event_id):
-        url = self.url + "/JSON?request=runevent&id={}".format(str(event_id))
+        url = self.url + "request=runevent&id={}".format(str(event_id))
         response = self._send_command(url)
         return response

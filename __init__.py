@@ -11,8 +11,8 @@ from adapt.intent import IntentBuilder
 from mycroft.skills.core import MycroftSkill, intent_handler
 from mycroft.util.log import LOG
 
-# from homeseer_interface.HomeseerInterface import HomeseerInterface, HomeSeerCommandException
-from .homeseer_interface.HomeseerInterfaceSpoof import HomeseerInterfaceSpoof as HomeseerInterface, HomeSeerCommandException
+from .homeseer_interface.HomeseerInterface import HomeseerInterface, HomeSeerCommandException
+# from .homeseer_interface.HomeseerInterfaceSpoof import HomeseerInterfaceSpoof as HomeseerInterface, HomeSeerCommandException
 
 # Each skill is contained within its own class, which inherits base methods
 # from the MycroftSkill class.  You extend this class as shown below.
@@ -28,7 +28,7 @@ class HomeSeerSkill(MycroftSkill):
     def __init__(self):
         super(HomeSeerSkill, self).__init__(name="HomeSeerSkill")
 
-        self.hs = HomeseerInterface(self.config.get('url'))
+        self.hs = HomeseerInterface(self.config.get('url'), "demo@homeseer.com", "demo100")
         self.device_list = []
 
     def initialize(self):
