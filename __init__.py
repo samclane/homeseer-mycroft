@@ -4,24 +4,20 @@
 # in the requirements.txt file so the library is installed properly
 # when the skill gets installed later by a user.
 
-import json
 from collections import namedtuple
 from fuzzywuzzy import fuzz
-
-import requests
 
 from adapt.intent import IntentBuilder
 from mycroft.skills.core import MycroftSkill, intent_handler
 from mycroft.util.log import LOG
 
+# from homeseer_interface.HomeseerInterface import HomeseerInterface, HomeSeerCommandException
+from homeseer_interface.HomeseerInterfaceSpoof import HomeseerInterfaceSpoof as HomeseerInterface, HomeSeerCommandException
+
 # Each skill is contained within its own class, which inherits base methods
 # from the MycroftSkill class.  You extend this class as shown below.
 
 Device = namedtuple('Device', 'ref name location location2')
-
-
-class HomeSeerCommandException(Exception):
-    pass
 
 
 class HomeSeerSkill(MycroftSkill):
@@ -32,7 +28,7 @@ class HomeSeerSkill(MycroftSkill):
     def __init__(self):
         super(HomeSeerSkill, self).__init__(name="HomeSeerSkill")
 
-        self.url = self.config.get('url')
+        self.hs = HomeseerInterface(self.config.get('url'))
         self.device_list = []
 
     def initialize(self):
@@ -44,48 +40,11 @@ class HomeSeerSkill(MycroftSkill):
 
         # Get HomeSeer devices from status query
         try:
-            for d in self._get_status()["Devices"]:
+            for d in self.hs.get_status()["Devices"]:
                 self.device_list.append(Device(d["ref"], d["name"], d["location"], d["location2"]))
         except HomeSeerCommandException:
             self.log.warning("Unable to connect to HomeSeer. Shutting down.")
             self.shutdown()
-
-    def _send_command(self, url: str):
-        try:
-            website = requests.get(url, timeout=self.TIMEOUT)
-            website.close()
-        except requests.exceptions.ConnectionError as detail:
-            raise requests.exceptions.ConnectionError("Could not connect to HomeSeer. "
-                                                      "Ensure service is running and IP address is correct.")
-        if website.text == "error":
-            raise HomeSeerCommandException()
-        return website.json()
-
-    def _get_status(self, ref="", location="", location2=""):
-        url = self.url + "/JSON?request=getstatus"
-        if len(ref) > 0:
-            url += "&ref={}".format(ref)
-        if len(location) > 0:
-            url += "&location1={}".format(location)
-        if len(location2) > 0:
-            url += "&location2={}".format(location2)
-        return self._send_command(url)
-
-    def _control_by_value(self, deviceref: int, value: float):
-        url = self.url + "/JSON?request=controldevicebyvalue&ref={}&value={}".format(str(deviceref), str(value))
-        response = self._send_command(url)
-
-    def _control_by_label(self, deviceref: int, label: str):
-        url = self.url + "/JSON?request=controldevicebylabel&ref={}&label={}".format(str(deviceref), label)
-        response = self._send_command(url)
-
-    def _run_event_by_group(self, group_name: str, event_name: str):
-        url = self.url + "/JSON?request=runevent&group={}&name={}".format(group_name, event_name)
-        response = self._send_command(url)
-
-    def _run_event_by_event_id(self, event_id):
-        url = self.url + "/JSON?request=runevent&id={}".format(str(event_id))
-        response = self._send_command(url)
 
     def get_device_by_attributes(self, detail: str):
         best_score = 0
@@ -106,7 +65,7 @@ class HomeSeerSkill(MycroftSkill):
         detail = message.data["Detail"]
 
         device: Device = self.get_device_by_attributes(detail)
-        status_json = self._get_status(device.ref, device.location, device.location2)
+        status_json = self.hs.get_status(device.ref, device.location, device.location2)
         status_string = status_json["status"]
 
         self.speak_dialog('DeviceStatus', {'name': device.name,
