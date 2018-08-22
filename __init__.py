@@ -36,10 +36,10 @@ class HomeSeerSkill(MycroftSkill):
         self.device_list = []
 
     def initialize(self):
-        supported_languages = ["en-US"]
+        supported_languages = ["en-us"]
 
         if self.lang not in supported_languages:
-            self.log.warning("Unsupported language for {}, shutting down skill".format(self.name))
+            self.log.warning("Unsupported language ({}) for {}, shutting down skill".format(self.lang, self.name))
             self.shutdown()
 
         # Get HomeSeer devices from status query
