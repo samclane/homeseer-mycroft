@@ -1,1 +1,1 @@
-get status of (?P<Detail>.+)
+get status of (?P<StatusDetail>.+)

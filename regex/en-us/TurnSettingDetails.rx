@@ -1,1 +1,1 @@
-turn (?P<ToggleSetting>(off|on)) (?P<Detail>.+)
+turn (?P<ToggleSetting>(off|on)) (?P<ToggleSingleDetail>.+)
