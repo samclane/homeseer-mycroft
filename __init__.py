@@ -63,8 +63,11 @@ class HomeSeerSkill(MycroftSkill):
     @intent_handler(IntentBuilder("").require("Detail"))
     def handle_get_status_intent(self, message):
         detail = message.data["Detail"]
+        self.log.info("Getting status for {}...".format(detail))
         device: Device = self.get_device_by_attributes(detail)
+        self.log.info("Device found: {}".format(device))
         status_json = self.hs.get_status(device.ref, device.location, device.location2)
+        self.log.info("Device status: {}".format(status_json))
         status_string = status_json["status"]
 
         self.speak_dialog('DeviceStatus', {'name': device.name,
