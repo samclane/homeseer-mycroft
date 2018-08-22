@@ -87,28 +87,25 @@ class HomeSeerSkill(MycroftSkill):
         url = self.url + "/JSON?request=runevent&id={}".format(str(event_id))
         response = self._send_command(url)
 
-    def get_device_by_attributes(self, name, location="", location2=""):
+    def get_device_by_attributes(self, detail: str):
         best_score = 0
         score = 0
         best_device = None
 
         for device in self.device_list:
-            score = fuzz.ratio(name, device.name) + fuzz.ratio(location, device.location) + \
-                    fuzz.ratio(location2, device.location2)
+            device_detail = " ".join(device)
+            score = fuzz.ratio(detail, device_detail)
             if score > best_score:
                 best_score = score
                 best_device = device
 
         return best_device
 
-    @intent_handler(IntentBuilder("").require("GetStatus").require("Device").optionally("Location1")
-                    .optionally("Location2"))
+    @intent_handler(IntentBuilder("").require("GetStatus").require("Detail"))
     def handle_get_status_intent(self, message):
-        name = message.data["Device"]
-        location = message.data["Location"]
-        location2 = message.data["Location2"]
+        detail = message.data["Detail"]
 
-        device: Device = self.get_device_by_attributes(name, location, location2)
+        device: Device = self.get_device_by_attributes(detail)
         status_json = self._get_status(device.ref, device.location, device.location2)
         status_string = status_json["status"]
 
