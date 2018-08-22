@@ -12,7 +12,8 @@ from mycroft.skills.core import MycroftSkill, intent_handler
 from mycroft.util.log import LOG
 
 # from .homeseer_interface.HomeseerInterface import HomeseerInterface, HomeSeerCommandException
-from .homeseer_interface.HomeseerInterfaceSpoof import HomeseerInterfaceSpoof as HomeseerInterface, HomeSeerCommandException
+from .homeseer_interface.HomeseerInterfaceSpoof import HomeseerInterfaceSpoof as HomeseerInterface, \
+    HomeSeerCommandException
 
 # Each skill is contained within its own class, which inherits base methods
 # from the MycroftSkill class.  You extend this class as shown below.
@@ -96,8 +97,8 @@ class HomeSeerSkill(MycroftSkill):
         setting = message.data["ToggleSetting"]
         self.log.info("Setting ALL details {} to {}".format(detail, setting))
         root_device: Device = self.get_device_by_attributes(detail)
-        self.speak_dialog('ToggleSingle', {'setting': setting,
-                                           'name': root_device.name})
+        self.speak_dialog('ToggleAll', {'setting': setting,
+                                        'name': root_device.name})
         devices = self.get_devices_by_attribute(root_device, 'name')
         for d in devices:
             try:
