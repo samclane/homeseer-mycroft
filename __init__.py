@@ -60,7 +60,7 @@ class HomeSeerSkill(MycroftSkill):
 
         return best_device
 
-    @intent_handler(IntentBuilder("").require("GetStatusDetail"))
+    @intent_handler(IntentBuilder("").require("Detail"))
     def handle_get_status_intent(self, message):
         detail = message.data["Detail"]
         device: Device = self.get_device_by_attributes(detail)
