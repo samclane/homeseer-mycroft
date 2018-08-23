@@ -71,7 +71,7 @@ class HomeSeerSkill(MycroftSkill):
         device: Device = self.get_device_by_attributes(detail)
         try:
             status_json = self.hs.get_status(device.ref, device.location, device.location2)
-            status_string = status_json["status"]
+            status_string = status_json["Devices"][0]["status"]
 
             self.speak_dialog('DeviceStatus', {'name': device.name,
                                                'value': status_string})
