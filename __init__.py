@@ -47,6 +47,22 @@ class HomeSeerSkill(MycroftSkill):
             self.log.warning("Unable to connect to HomeSeer. Shutting down.")
             self.shutdown()
 
+    @property
+    def device_refs(self):
+        return [d.ref for d in self.device_list]
+
+    @property
+    def device_names(self):
+        return [d.name for d in self.device_list]
+
+    @property
+    def device_locations(self):
+        return [d.location for d in self.device_list]
+
+    @property
+    def device_location2s(self):
+        return [d.location2 for d in self.device_list]
+
     def get_device_by_attributes(self, detail: str):
         best_score = 0
         score = 0
@@ -61,9 +77,24 @@ class HomeSeerSkill(MycroftSkill):
 
         return best_device
 
-    def get_devices_by_attribute(self, root_device: Device, attribute: str):
-        root_attr = getattr(root_device, attribute)
-        return [d for d in self.device_list if getattr(d, attribute) == root_attr]
+    def get_devices_by_attributes(self, root_device: Device, attributes: [str]):
+        return [d for d in self.device_list if all([getattr(d, attribute) == getattr(root_device, attribute)
+                                                    for attribute in attributes])]
+
+    @staticmethod
+    def get_attributes_from_utterance(best_case_device: Device, utterance: str) -> list:
+        """ Given a string and a best-case Device, determine what attributes were given"""
+        name = best_case_device.name
+        loc1 = best_case_device.location
+        loc2 = best_case_device.location2
+        attributes = []
+        if name in utterance:
+            attributes.append('name')
+        if loc1 in utterance:
+            attributes.append('location')
+        if loc2 in utterance:
+            attributes.append('location2')
+        return attributes
 
     @intent_handler(IntentBuilder("").require("StatusDetail"))
     def handle_get_status_intent(self, message):
@@ -99,7 +130,8 @@ class HomeSeerSkill(MycroftSkill):
         root_device: Device = self.get_device_by_attributes(detail)
         self.speak_dialog('ToggleAll', {'setting': setting,
                                         'name': root_device.name})
-        devices = self.get_devices_by_attribute(root_device, 'name')
+        attributes = self.get_attributes_from_utterance(root_device, detail)
+        devices = self.get_devices_by_attributes(root_device, attributes)
         for d in devices:
             try:
                 self.hs.control_by_label(d.ref, setting)
