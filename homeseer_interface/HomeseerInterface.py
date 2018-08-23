@@ -22,9 +22,9 @@ class HomeseerInterface:
         except requests.exceptions.ConnectionError as detail:
             raise requests.exceptions.ConnectionError("Could not connect to HomeSeer. "
                                                       "Ensure service is running and IP address is correct.")
-        if website.text == "error":
-            raise HomeSeerCommandException()
         LOG.info("...Request returned {}".format(website.json()))
+        if "error" in website.json()["Response"].lower():
+            raise HomeSeerCommandException(website.json()["Response"])
         return website.json()
 
     def get_status(self, ref="", location="", location2=""):
