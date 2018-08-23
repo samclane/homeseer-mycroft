@@ -122,7 +122,6 @@ class HomeSeerSkill(MycroftSkill):
         detail = message.data["ToggleSingleDetail"]
         setting = message.data["ToggleSetting"]
         self.log.info("Setting ALL details {} to {}".format(detail, setting))
-        root_device: Device = self.get_device_by_attributes(detail)
         self.speak_dialog('ToggleAll', {'setting': setting,
                                         'name': detail})
         devices = self.get_devices_by_attributes(detail)
@@ -131,6 +130,20 @@ class HomeSeerSkill(MycroftSkill):
                 self.hs.control_by_label(d.ref, setting)
             except HomeSeerCommandException as e:
                 self.speak_dialog('Error', {'exception': str(e)})
+
+    @intent_handler(IntentBuilder("").require("LockSetting").require("LockDetail"))
+    def handle_lock_setting_intent(self, message):
+        detail = message.data["LockDetail"]
+        setting = message.data["LockSetting"]
+        device: Device = self.get_device_by_attributes(detail)
+        self.log.info("{}ing {}...".format(setting, detail))
+        self.speak_dialog('Lock', {'setting': setting,
+                                   'name': device.name})
+        try:
+            self.hs.control_by_label(device.ref, setting + "ed")
+        except HomeSeerCommandException as e:
+            self.speak_dialog('Error', {'exception': str(e)})
+
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
