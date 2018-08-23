@@ -149,6 +149,7 @@ class HomeSeerSkill(MycroftSkill):
                 self.hs.control_by_label(d.ref, setting)
             except HomeSeerCommandException as e:
                 self.speak_dialog('Error', {'exception': str(e)})
+                break
 
     @intent_handler(IntentBuilder("").require("LockSetting").require("LockDetail"))
     def handle_lock_setting_intent(self, message):
@@ -191,6 +192,7 @@ class HomeSeerSkill(MycroftSkill):
                 self.hs.control_by_value(d.ref, int(percent))
             except HomeSeerCommandException as e:
                 self.speak_dialog('Error', {'exception': str(e)})
+                break
 
     @intent_handler(IntentBuilder("").require("EventDetail"))
     def handle_run_event_intent(self, message):
