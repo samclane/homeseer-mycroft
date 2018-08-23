@@ -94,6 +94,7 @@ class HomeSeerSkill(MycroftSkill):
             attributes.append('location')
         if loc2 in utterance:
             attributes.append('location2')
+        LOG.info("Attributes from details {} is {}".format(utterance, attributes))
         return attributes
 
     @intent_handler(IntentBuilder("").require("StatusDetail"))
