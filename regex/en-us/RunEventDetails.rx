@@ -1,2 +1,2 @@
-run event (?P<EventDetail>.*)
-run (?P<EventDetail>.*) event
+run event (?P<EventDetail>.+)
+run (?P<EventDetail>.+) event

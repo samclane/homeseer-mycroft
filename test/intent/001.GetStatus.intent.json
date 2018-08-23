@@ -1,0 +1,8 @@
+{
+  "utterance": "get the status of the lights",
+  "intent": {
+    "StatusDetail": "lights"
+  },
+  "expected_dialog": "DeviceStatus",
+  "evaluation_timeout": 10
+}
