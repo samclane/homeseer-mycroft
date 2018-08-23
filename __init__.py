@@ -162,6 +162,9 @@ class HomeSeerSkill(MycroftSkill):
         detail = message.data["SetDetail"]
         percent = message.data["Percentage"]
         devices = self.get_devices_by_attributes(detail)
+        self.log.info("Setting {} to {}%".format(detail, percent))
+        self.speak_dialog('SetPercentAll', {'percent': percent,
+                                            'name': detail})
         for d in devices:
             try:
                 self.hs.control_by_value(d.ref, int(percent))
