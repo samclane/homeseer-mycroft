@@ -19,6 +19,7 @@ from .homeseer_interface.HomeseerInterface import HomeseerInterface, HomeSeerCom
 # from the MycroftSkill class.  You extend this class as shown below.
 
 Device = namedtuple('Device', 'ref name location location2')
+Event = namedtuple('Event', 'group name id')
 
 
 class HomeSeerSkill(MycroftSkill):
@@ -31,6 +32,7 @@ class HomeSeerSkill(MycroftSkill):
 
         self.hs = HomeseerInterface(self.config.get('url'), self.config.get('username'), self.config.get('password'))
         self.device_list = []
+        self.event_list = []
 
     def initialize(self):
         supported_languages = ["en-us"]
@@ -43,6 +45,8 @@ class HomeSeerSkill(MycroftSkill):
         try:
             for d in self.hs.get_status()["Devices"]:
                 self.device_list.append(Device(str(d["ref"]), d["name"], d["location"], d["location2"]))
+            for e in self.hs.get_events():
+                self.event_list.append(Event(e["Group"], e["Name"], str(e["id"])))
         except HomeSeerCommandException:
             self.log.warning("Unable to connect to HomeSeer. Shutting down.")
             self.shutdown()
@@ -84,6 +88,20 @@ class HomeSeerSkill(MycroftSkill):
                 best_device = device
 
         return best_device
+    
+    def get_event_by_attributes(self, detail: str):
+        best_score = 0
+        score = 0
+        best_event = None
+
+        for event in self.event_list:
+            event_detail = event.name
+            score = fuzz.ratio(detail, event_detail)
+            if score > best_score:
+                best_score = score
+                best_event = event
+
+        return best_event
 
     def get_devices_by_attributes(self, detail: str) -> [Device]:
         """ Get a list of devices by returning all that have the same score as the best Device. """
@@ -170,6 +188,17 @@ class HomeSeerSkill(MycroftSkill):
                 self.hs.control_by_value(d.ref, int(percent))
             except HomeSeerCommandException as e:
                 self.speak_dialog('Error', {'exception': str(e)})
+
+    @intent_handler(IntentBuilder("").require("EventDetail"))
+    def handle_run_event_intent(self, message):
+        detail = message.data["EventDetail"]
+        event = self.get_event_by_attributes(detail)
+        self.log.info("Running event {}".format(event.name))
+        self.speak_dialog('RunEvent', {'name': event.name})
+        try:
+            self.hs.run_event_by_event_id(event.id)
+        except HomeSeerCommandException as e:
+            self.speak_dialog('Error', {'exception': str(e)})
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality

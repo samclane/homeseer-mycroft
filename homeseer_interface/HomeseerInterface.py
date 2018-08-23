@@ -40,6 +40,11 @@ class HomeseerInterface:
         response = self._send_command(url)
         return response
 
+    def get_events(self) -> list:
+        url = self.url + "request=getevents"
+        response = self._send_command(url)
+        return response["Events"]
+
     def control_by_value(self, deviceref: int, value: float):
         url = self.url + "request=controldevicebyvalue&ref={}&value={}".format(str(deviceref), str(value))
         response = self._send_command(url)
