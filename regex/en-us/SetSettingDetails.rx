@@ -1,1 +1,1 @@
-set (?:all )?(?P<SetDetail>.+) to (?P<Percentage>.+)(?: percent)?
+set (?:all )?(?P<SetDetail>.+) to (?P<Percentage>\d+)(?: percent)?
