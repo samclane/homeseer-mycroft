@@ -29,7 +29,7 @@ class HomeSeerSkill(MycroftSkill):
     def __init__(self):
         super(HomeSeerSkill, self).__init__(name="HomeSeerSkill")
 
-        self.hs = HomeseerInterface(self.config.get('url'), "demo@homeseer.com", "demo100")
+        self.hs = HomeseerInterface(self.config.get('url'), self.config.get('username'), self.config.get('password'))
         self.device_list = []
 
     def initialize(self):
