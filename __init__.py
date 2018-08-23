@@ -194,7 +194,7 @@ class HomeSeerSkill(MycroftSkill):
         detail = message.data["EventDetail"]
         event = self.get_event_by_attributes(detail)
         self.log.info("Running event {}".format(event.name))
-        self.speak_dialog('RunEvent', {'name': event.name})
+        self.speak_dialog('RunEvent', {'event': event.name})
         try:
             self.hs.run_event_by_event_id(event.id)
         except HomeSeerCommandException as e:
