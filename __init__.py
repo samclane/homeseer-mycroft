@@ -166,6 +166,7 @@ class HomeSeerSkill(MycroftSkill):
     @intent_handler(IntentBuilder("").require("SetDetail").require("Percentage"))
     def handle_set_percentage_intent(self, message):
         detail = message.data["SetDetail"]
+        self.log.info("Percent {}".format(message.data["Percentage"]))
         percent = str(int(extract_number(message.data["Percentage"])))
         device: Device = self.get_device_by_attributes(detail)
         self.log.info("Setting {} to {}%".format(device.name, percent))
