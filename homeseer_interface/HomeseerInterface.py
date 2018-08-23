@@ -1,4 +1,5 @@
 import requests
+from mycroft.util.log import LOG
 
 
 class HomeSeerCommandException(Exception):
@@ -14,6 +15,7 @@ class HomeseerInterface:
             self.url += "user={}&pass={}&".format(user, password)
 
     def _send_command(self, url: str):
+        LOG.info("Sending request to {}".format(url))
         try:
             website = requests.get(url, timeout=self.TIMEOUT)
             website.close()
@@ -22,6 +24,7 @@ class HomeseerInterface:
                                                       "Ensure service is running and IP address is correct.")
         if website.text == "error":
             raise HomeSeerCommandException()
+        LOG.info("...Request returned {}".format(website.json()))
         return website.json()
 
     def get_status(self, ref="", location="", location2=""):
