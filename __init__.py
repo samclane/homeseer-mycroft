@@ -137,13 +137,36 @@ class HomeSeerSkill(MycroftSkill):
         setting = message.data["LockSetting"]
         device: Device = self.get_device_by_attributes(detail)
         self.log.info("{}ing {}...".format(setting, detail))
-        self.speak_dialog('Lock', {'setting': setting,
+        self.speak_dialog('Lock', {'setting': setting+"ing",
                                    'name': device.name})
         try:
             self.hs.control_by_label(device.ref, setting + "ed")
         except HomeSeerCommandException as e:
             self.speak_dialog('Error', {'exception': str(e)})
 
+    @intent_handler(IntentBuilder("").require("SetDetail").require("Percentage"))
+    def handle_set_percentage_intent(self, message):
+        detail = message.data["SetDetail"]
+        percent = message.data["Percentage"]
+        device: Device = self.get_device_by_attributes(detail)
+        self.log.info("Setting {} to {}%".format(device.name, percent))
+        self.speak_dialog('SetPercent', {'percent': percent,
+                                         'name': device.name})
+        try:
+            self.hs.control_by_value(device.ref, int(percent))
+        except HomeSeerCommandException as e:
+            self.speak_dialog('Error', {'exception': str(e)})
+
+    @intent_handler(IntentBuilder("").require("AllKeyword").require("SetDetail").require("Percentage"))
+    def handle_set_percentage_all_intent(self, message):
+        detail = message.data["SetDetail"]
+        percent = message.data["Percentage"]
+        devices = self.get_devices_by_attributes(detail)
+        for d in devices:
+            try:
+                self.hs.control_by_value(d.ref, int(percent))
+            except HomeSeerCommandException as e:
+                self.speak_dialog('Error', {'exception': str(e)})
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
