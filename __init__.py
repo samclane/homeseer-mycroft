@@ -10,6 +10,7 @@ from fuzzywuzzy import fuzz, process
 from adapt.intent import IntentBuilder
 from mycroft.skills.core import MycroftSkill, intent_handler
 from mycroft.util.log import LOG
+from mycroft.util.parse import extract_number
 
 from .homeseer_interface.HomeseerInterface import HomeseerInterface, HomeSeerCommandException
 # from .homeseer_interface.HomeseerInterfaceSpoof import HomeseerInterfaceSpoof as HomeseerInterface, \
@@ -165,7 +166,7 @@ class HomeSeerSkill(MycroftSkill):
     @intent_handler(IntentBuilder("").require("SetDetail").require("Percentage"))
     def handle_set_percentage_intent(self, message):
         detail = message.data["SetDetail"]
-        percent = message.data["Percentage"]
+        percent = str(extract_number(message.data["Percentage"]))
         device: Device = self.get_device_by_attributes(detail)
         self.log.info("Setting {} to {}%".format(device.name, percent))
         self.speak_dialog('SetPercent', {'percent': percent,
@@ -178,7 +179,7 @@ class HomeSeerSkill(MycroftSkill):
     @intent_handler(IntentBuilder("").require("AllKeyword").require("SetDetail").require("Percentage"))
     def handle_set_percentage_all_intent(self, message):
         detail = message.data["SetDetail"]
-        percent = message.data["Percentage"]
+        percent = str(extract_number(message.data["Percentage"]))
         devices = self.get_devices_by_attributes(detail)
         self.log.info("Setting {} to {}%".format(detail, percent))
         self.speak_dialog('SetPercentAll', {'percent': percent,
