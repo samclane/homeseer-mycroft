@@ -23,8 +23,9 @@ class HomeseerInterface:
             raise requests.exceptions.ConnectionError("Could not connect to HomeSeer. "
                                                       "Ensure service is running and IP address is correct.")
         LOG.info("...Request returned {}".format(website.json()))
-        if website.text == "error" or \
-                ("Response" in website.json().keys() and "error" in website.json()["Response"].lower()):
+        if website.text == "error":
+            raise HomeSeerCommandException("Request returned error.")
+        if "Response" in website.json().keys() and "error" in website.json()["Response"].lower():
             raise HomeSeerCommandException(website.json()["Response"])
         return website.json()
 
