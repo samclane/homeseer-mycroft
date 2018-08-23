@@ -47,7 +47,7 @@ devices.
 * “{Mycroft} {Get the status of the} {Door Lock}“
 * “{Mycroft} {Get the status of the} {Kitchen} {Door Lock}“
 * “{Mycroft} {Get the status of the} {First Floor} {Kitchen} {Door Lock}“
-###### Working with Events
+#### Working with Events
 Syntax and examples below are example phrases that will launch HomeSeer events.
 * “{Attention Phrase} {Command} {Event Name} {Command}“
 ###### Launching HomeSeer Events
