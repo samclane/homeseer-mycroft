@@ -77,7 +77,7 @@ class HomeSeerSkill(MycroftSkill):
         best_device = None
 
         for device in self.device_list:
-            device_detail = " ".join([device.location2, device.location, device.name])
+            device_detail = self.get_detail(device)
             score = fuzz.ratio(detail, device_detail)
             if score > best_score:
                 best_score = score
@@ -85,11 +85,11 @@ class HomeSeerSkill(MycroftSkill):
 
         return best_device
 
-    def get_devices_by_attributes(self, detail: str):
+    def get_devices_by_attributes(self, detail: str) -> [Device]:
+        """ Get a list of devices by returning all that have the same score as the best Device. """
         ranklist = process.extract(detail, self.device_details)
         best_score = ranklist[0][1]
         return [device for device in self.device_list if fuzz.WRatio(detail, self.get_detail(device)) == best_score]
-
 
     @intent_handler(IntentBuilder("").require("StatusDetail"))
     def handle_get_status_intent(self, message):
