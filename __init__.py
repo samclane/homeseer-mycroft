@@ -69,7 +69,7 @@ class HomeSeerSkill(MycroftSkill):
         best_device = None
 
         for device in self.device_list:
-            device_detail = " ".join(device)
+            device_detail = " ".join([device.location2, device.location, device.name])
             score = fuzz.ratio(detail, device_detail)
             if score > best_score:
                 best_score = score
@@ -84,9 +84,9 @@ class HomeSeerSkill(MycroftSkill):
     @staticmethod
     def get_attributes_from_utterance(best_case_device: Device, utterance: str) -> list:
         """ Given a string and a best-case Device, determine what attributes were given"""
-        name = best_case_device.name
-        loc1 = best_case_device.location
-        loc2 = best_case_device.location2
+        name = best_case_device.name.lower()
+        loc1 = best_case_device.location.lower()
+        loc2 = best_case_device.location2.lower()
         attributes = []
         if name in utterance:
             attributes.append('name')
