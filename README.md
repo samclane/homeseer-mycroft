@@ -11,8 +11,8 @@ Add the block below to your `mycroft.conf` file:
 ```json
   "HomeSeerSkill" : {
 	"url": "HomeSeer server local IP",
-	"username" : "Your HomeSeer account username",
-	"password": "Your HomeSeer account password"
+	"username" : "Your HomeSeer account username. Put 'null' if local.",
+	"password": "Your HomeSeer account password. Put 'null' of local."
 }
 ```
 
