@@ -5,7 +5,7 @@
 # when the skill gets installed later by a user.
 
 from collections import namedtuple
-from fuzzywuzzy import fuzz
+from fuzzywuzzy import fuzz, process
 
 from adapt.intent import IntentBuilder
 from mycroft.skills.core import MycroftSkill, intent_handler
@@ -63,6 +63,14 @@ class HomeSeerSkill(MycroftSkill):
     def device_location2s(self):
         return [d.location2 for d in self.device_list]
 
+    @property
+    def device_details(self):
+        return [self.get_detail(device) for device in self.device_list]
+
+    @staticmethod
+    def get_detail(device: Device):
+        return " ".join([device.location2, device.location, device.name])
+
     def get_device_by_attributes(self, detail: str):
         best_score = 0
         score = 0
@@ -77,25 +85,11 @@ class HomeSeerSkill(MycroftSkill):
 
         return best_device
 
-    def get_devices_by_attributes(self, root_device: Device, attributes: [str]):
-        return [d for d in self.device_list if all([getattr(d, attribute) == getattr(root_device, attribute)
-                                                    for attribute in attributes])]
+    def get_devices_by_attributes(self, detail: str):
+        ranklist = process.extract(detail, self.device_details)
+        best_score = ranklist[0][1]
+        return [device for device in self.device_list if fuzz.WRatio(detail, self.get_detail(device)) == best_score]
 
-    @staticmethod
-    def get_attributes_from_utterance(best_case_device: Device, utterance: str) -> list:
-        """ Given a string and a best-case Device, determine what attributes were given"""
-        name = best_case_device.name.lower()
-        loc1 = best_case_device.location.lower()
-        loc2 = best_case_device.location2.lower()
-        attributes = []
-        if name in utterance:
-            attributes.append('name')
-        if loc1 in utterance:
-            attributes.append('location')
-        if loc2 in utterance:
-            attributes.append('location2')
-        LOG.info("Attributes from details {} is {}".format(utterance, attributes))
-        return attributes
 
     @intent_handler(IntentBuilder("").require("StatusDetail"))
     def handle_get_status_intent(self, message):
@@ -130,9 +124,8 @@ class HomeSeerSkill(MycroftSkill):
         self.log.info("Setting ALL details {} to {}".format(detail, setting))
         root_device: Device = self.get_device_by_attributes(detail)
         self.speak_dialog('ToggleAll', {'setting': setting,
-                                        'name': root_device.name})
-        attributes = self.get_attributes_from_utterance(root_device, detail)
-        devices = self.get_devices_by_attributes(root_device, attributes)
+                                        'name': detail})
+        devices = self.get_devices_by_attributes(detail)
         for d in devices:
             try:
                 self.hs.control_by_label(d.ref, setting)
