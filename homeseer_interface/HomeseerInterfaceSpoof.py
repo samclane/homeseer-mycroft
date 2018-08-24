@@ -62,7 +62,7 @@ class HomeseerInterfaceSpoof(HomeseerInterface):
                 {
                     "Group": "Lighting",
                     "Name": "Outside Lights Off",
-                    "Id": 1234
+                    "id": 1234
                 }
             ]
         }
