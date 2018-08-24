@@ -1,1 +1,1 @@
-set value (?:of )?(?:all )?(?P<SetDetail>.+) to
+set value (?:of )?(?:all )?(?P<SetDetail>.+)
