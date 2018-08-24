@@ -1,1 +1,1 @@
-(?P<Percentage>\d+)(\%|\s*percent)
+(?P<Percentage>\d+)(?:\%|\s*percent)?
