@@ -89,7 +89,11 @@ class HomeseerInterfaceSpoof(HomeseerInterface):
         if len(ref):
             for d in self._status["Devices"]:
                 if d["ref"] == int(ref):
-                    return d
+                    return {
+                        "Devices": [
+                            d
+                        ]
+                    }
             raise HomeSeerCommandException("Device with ref {} not found in status".format(ref))
         else:
             return self._status
