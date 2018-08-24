@@ -4,6 +4,6 @@
   "intent": {
     "StatusDetail": "lights"
   },
-  "expected_dialog": "SomethingElse",
+  "expected_dialog": "DeviceStatus",
   "evaluation_timeout": 10
 }
