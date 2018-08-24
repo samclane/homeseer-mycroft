@@ -103,7 +103,7 @@ class HomeSeerSkill(MycroftSkill):
         best_score = ranklist[0][1]
         return [device for device in self.device_list if fuzz.WRatio(detail, self.get_detail(device)) == best_score]
 
-    @intent_handler(IntentBuilder("handle_get_status_intent").require("StatusDetail"))
+    @intent_handler(IntentBuilder("").require("StatusDetail"))
     def handle_get_status_intent(self, message):
         detail = message.data["StatusDetail"]
         device: Device = self.get_device_by_attributes(detail)
@@ -116,7 +116,7 @@ class HomeSeerSkill(MycroftSkill):
         except HomeSeerCommandException as e:
             self.speak_dialog('Error', {'exception': str(e)})
 
-    @intent_handler(IntentBuilder("handle_turn_setting_intent").require("ToggleSetting").require("ToggleSingleDetail"))
+    @intent_handler(IntentBuilder("").require("ToggleSetting").require("ToggleSingleDetail"))
     def handle_turn_setting_intent(self, message):
         detail = message.data["ToggleSingleDetail"]
         setting = message.data["ToggleSetting"]
@@ -129,7 +129,7 @@ class HomeSeerSkill(MycroftSkill):
         except HomeSeerCommandException as e:
             self.speak_dialog('Error', {'exception': str(e)})
 
-    @intent_handler(IntentBuilder("handle_turn_setting_all_intent").require("AllKeyword").require("ToggleSetting").require("ToggleSingleDetail"))
+    @intent_handler(IntentBuilder("").require("AllKeyword").require("ToggleSetting").require("ToggleSingleDetail"))
     def handle_turn_setting_all_intent(self, message):
         detail = message.data["ToggleSingleDetail"]
         setting = message.data["ToggleSetting"]
@@ -144,7 +144,7 @@ class HomeSeerSkill(MycroftSkill):
                 self.speak_dialog('Error', {'exception': str(e)})
                 break
 
-    @intent_handler(IntentBuilder("handle_lock_setting_intent").require("LockSetting").require("LockDetail"))
+    @intent_handler(IntentBuilder("").require("LockSetting").require("LockDetail"))
     def handle_lock_setting_intent(self, message):
         detail = message.data["LockDetail"]
         setting = message.data["LockSetting"]
@@ -157,7 +157,7 @@ class HomeSeerSkill(MycroftSkill):
         except HomeSeerCommandException as e:
             self.speak_dialog('Error', {'exception': str(e)})
 
-    @intent_handler(IntentBuilder("handle_set_percentage_intent").require("SetDetail"))
+    @intent_handler(IntentBuilder("").require("SetDetail"))
     def handle_set_percentage_intent(self, message):
         detail = message.data["SetDetail"]
         # percent = message.data["Percentage"]
@@ -174,7 +174,7 @@ class HomeSeerSkill(MycroftSkill):
         except HomeSeerCommandException as e:
             self.speak_dialog('Error', {'exception': str(e)})
 
-    @intent_handler(IntentBuilder("handle_set_percentage_all_intent").require("AllKeyword").require("SetDetail"))
+    @intent_handler(IntentBuilder("").require("AllKeyword").require("SetDetail"))
     def handle_set_percentage_all_intent(self, message):
         detail = message.data["SetDetail"]
         # percent = message.data["Percentage"]
@@ -192,7 +192,7 @@ class HomeSeerSkill(MycroftSkill):
                 self.speak_dialog('Error', {'exception': str(e)})
                 break
 
-    @intent_handler(IntentBuilder("handle_run_event_intent").require("EventDetail"))
+    @intent_handler(IntentBuilder("").require("EventDetail"))
     def handle_run_event_intent(self, message):
         detail = message.data["EventDetail"]
         event = self.get_event_by_attributes(detail)
