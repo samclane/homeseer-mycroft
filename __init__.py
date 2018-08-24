@@ -1,9 +1,3 @@
-# Below is the list of outside modules you'll be using in your skill.
-# They might be built-in to Python, from mycroft-core or from external
-# libraries.  If you use an external library, be sure to include it
-# in the requirements.txt file so the library is installed properly
-# when the skill gets installed later by a user.
-
 from collections import namedtuple
 from fuzzywuzzy import fuzz, process
 
