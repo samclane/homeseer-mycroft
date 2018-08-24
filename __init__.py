@@ -157,7 +157,7 @@ class HomeSeerSkill(MycroftSkill):
         except HomeSeerCommandException as e:
             self.speak_dialog('Error', {'exception': str(e)})
 
-    @intent_handler(IntentBuilder("").require("SetDetail").require("Percentage"))
+    @intent_handler(IntentBuilder("").require("SetDetail"))
     def handle_set_percentage_intent(self, message):
         detail = message.data["SetDetail"]
         # percent = str(int(extract_number(message.data["Percentage"], short_scale=False)))
@@ -173,7 +173,7 @@ class HomeSeerSkill(MycroftSkill):
         except HomeSeerCommandException as e:
             self.speak_dialog('Error', {'exception': str(e)})
 
-    @intent_handler(IntentBuilder("").require("AllKeyword").require("SetDetail").require("Percentage"))
+    @intent_handler(IntentBuilder("").require("AllKeyword").require("SetDetail"))
     def handle_set_percentage_all_intent(self, message):
         detail = message.data["SetDetail"]
         # percent = str(int(extract_number(message.data["Percentage"], short_scale=False)))
