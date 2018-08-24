@@ -7,7 +7,7 @@ class HomeSeerCommandException(Exception):
 
 
 class HomeseerInterface:
-    TIMEOUT = 2
+    TIMEOUT = 10
 
     def __init__(self, url, user=None, password=None):
         self.url = url + "/JSON?"
