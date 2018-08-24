@@ -57,6 +57,13 @@ class HomeseerInterfaceSpoof(HomeseerInterface):
                     },
                     "device_image": ""
                 }
+            ],
+            "Events": [
+                {
+                    "Group": "Lighting",
+                    "Name": "Outside Lights Off",
+                    "Id": 1234
+                }
             ]
         }
 
@@ -64,14 +71,19 @@ class HomeseerInterfaceSpoof(HomeseerInterface):
         LOG.info("Calling {}".format(url))
         return "OK"
 
+    def get_events(self):
+        url = self.url + "request=getevents"
+        response = self._send_command(url)
+        return self._status["Events"]
+
     def get_status(self, ref="", location="", location2=""):
         url = self.url + "request=getstatus"
         if len(ref) > 0:
             url += "&ref={}".format(ref)
         if len(location) > 0:
-            url += "&location1=\"{}\"".format(location)
+            url += "&location1={}".format(location)
         if len(location2) > 0:
-            url += "&location2=\"{}\"".format(location2)
+            url += "&location2={}".format(location2)
         response = self._send_command(url)
 
         if len(ref):
@@ -83,17 +95,17 @@ class HomeseerInterfaceSpoof(HomeseerInterface):
             return self._status
 
     def control_by_value(self, deviceref, value: float):
-        url = self.url + "/JSON?request=controldevicebyvalue&ref={}&value={}".format(str(deviceref), str(value))
+        url = self.url + "request=controldevicebyvalue&ref={}&value={}".format(str(deviceref), str(value))
         response = self._send_command(url)
         return response
 
     def control_by_label(self, deviceref, label: str):
-        url = self.url + "request=controldevicebylabel&ref={}&label=\"{}\"".format(str(deviceref), label)
+        url = self.url + "request=controldevicebylabel&ref={}&label={}".format(str(deviceref), label)
         response = self._send_command(url)
         return response
 
     def run_event_by_group(self, group_name: str, event_name: str):
-        url = self.url + "request=runevent&group=\"{}\"&name=\"{}\"".format(group_name, event_name)
+        url = self.url + "request=runevent&group={}&name={}".format(group_name, event_name)
         response = self._send_command(url)
         return response
 
