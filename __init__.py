@@ -163,7 +163,7 @@ class HomeSeerSkill(MycroftSkill):
         # percent = str(int(extract_number(message.data["Percentage"], short_scale=False)))
         # percent = message.data["Percentage"]
         index = message.data["utterance"].rfind("to")
-        percent = str(int(extract_number(message.data["utterance"][index:].translate(None, '%'), short_scale=False)))
+        percent = str(int(extract_number(message.data["utterance"][index:].translate({ord('%'): None}), short_scale=False)))
         device: Device = self.get_device_by_attributes(detail)
         self.log.info("Setting {} to {}%".format(device.name, percent))
         self.speak_dialog('SetPercent', {'percent': percent,
@@ -179,7 +179,7 @@ class HomeSeerSkill(MycroftSkill):
         # percent = str(int(extract_number(message.data["Percentage"], short_scale=False)))
         # percent = message.data["Percentage"]
         index = message.data["utterance"].rfind("to")
-        percent = str(int(extract_number(message.data["utterance"][index:].translate(None, '%'), short_scale=False)))
+        percent = str(int(extract_number(message.data["utterance"][index:].translate({ord('%'): None}), short_scale=False)))
         devices = self.get_devices_by_attributes(detail)
         self.log.info("Setting {} to {}%".format(detail, percent))
         self.speak_dialog('SetPercentAll', {'percent': percent,
