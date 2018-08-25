@@ -6,9 +6,9 @@ from mycroft.skills.core import MycroftSkill, intent_handler
 from mycroft.util.log import LOG
 from mycroft.util.parse import extract_number
 
-# from .homeseer_interface.HomeseerInterface import HomeseerInterface, HomeSeerCommandException
-from .homeseer_interface.HomeseerInterfaceSpoof import HomeseerInterfaceSpoof as HomeseerInterface, \
-    HomeSeerCommandException
+from .homeseer_interface.HomeseerInterface import HomeseerInterface, HomeSeerCommandException
+# from .homeseer_interface.HomeseerInterfaceSpoof import HomeseerInterfaceSpoof as HomeseerInterface, \
+#     HomeSeerCommandException
 
 # Each skill is contained within its own class, which inherits base methods
 # from the MycroftSkill class.  You extend this class as shown below.
