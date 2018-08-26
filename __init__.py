@@ -69,7 +69,7 @@ class HomeSeerSkill(MycroftSkill):
     def get_detail(device: Device):
         return " ".join([device.location2, device.location, device.name])
 
-    def get_device_by_attributes(self, detail: str):
+    def get_device_by_attributes(self, detail: str) -> Device:
         best_score = 0
         score = 0
         best_device = None
@@ -106,7 +106,7 @@ class HomeSeerSkill(MycroftSkill):
     @intent_handler(IntentBuilder("").require("StatusDetail"))
     def handle_get_status_intent(self, message):
         detail = message.data["StatusDetail"]
-        device: Device = self.get_device_by_attributes(detail)
+        device = self.get_device_by_attributes(detail)
         try:
             status_json = self.hs.get_status(device.ref, device.location, device.location2)
             status_string = status_json["Devices"][0]["status"]
