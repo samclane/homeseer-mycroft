@@ -121,7 +121,7 @@ class HomeSeerSkill(MycroftSkill):
         detail = message.data["ToggleSingleDetail"]
         setting = message.data["ToggleSetting"]
         self.log.info("Setting details {} to {}".format(detail, setting))
-        device: Device = self.get_device_by_attributes(detail)
+        device = self.get_device_by_attributes(detail)
         self.speak_dialog('ToggleSingle', {'setting': setting,
                                            'name': device.name})
         try:
@@ -148,7 +148,7 @@ class HomeSeerSkill(MycroftSkill):
     def handle_lock_setting_intent(self, message):
         detail = message.data["LockDetail"]
         setting = message.data["LockSetting"]
-        device: Device = self.get_device_by_attributes(detail)
+        device = self.get_device_by_attributes(detail)
         self.log.info("{}ing {}...".format(setting, detail))
         self.speak_dialog('Lock', {'setting': setting+"ing",
                                    'name': device.name})
@@ -165,7 +165,7 @@ class HomeSeerSkill(MycroftSkill):
         index = message.data["utterance"].rfind("to")
         percent = str(int(extract_number(message.data["utterance"][index:].translate({ord('%'): None}),
                                          short_scale=False)))  # Remove % symbol that STT probably put there.
-        device: Device = self.get_device_by_attributes(detail)
+        device = self.get_device_by_attributes(detail)
         self.log.info("Setting {} to {}%".format(device.name, percent))
         self.speak_dialog('SetPercent', {'percent': percent,
                                          'name': device.name})
