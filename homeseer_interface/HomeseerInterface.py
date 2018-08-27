@@ -1,4 +1,5 @@
 import requests
+from json import JSONDecodeError
 from mycroft.util.log import LOG
 
 
@@ -10,6 +11,8 @@ class HomeseerInterface:
     TIMEOUT = 10
 
     def __init__(self, url, user=None, password=None):
+        if url[:4] != "http":  # ensure user-entered IP address has `http` prefix
+            url = "http://" + url
         self.url = url + "/JSON?"
         if user:
             self.url += "user={}&pass={}&".format(user, password)
@@ -24,8 +27,11 @@ class HomeseerInterface:
                                                       "Ensure service is running and IP address is correct.")
         if website.text.strip() == "error":
             raise HomeSeerCommandException("Request returned error.")
-        if "Response" in website.json().keys() and "error" in website.json()["Response"].lower():
-            raise HomeSeerCommandException(website.json()["Response"])
+        try:
+            if "Response" in website.json().keys() and "error" in website.json()["Response"].lower():
+                raise HomeSeerCommandException(website.json()["Response"])
+        except JSONDecodeError:
+            raise HomeSeerCommandException("Request returned non-JSON result")
         LOG.info("...Request returned {}".format(website.json()))
         return website.json()
 

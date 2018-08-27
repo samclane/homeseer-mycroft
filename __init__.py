@@ -7,11 +7,10 @@ from mycroft.util.log import LOG
 from mycroft.util.parse import extract_number
 
 from .homeseer_interface.HomeseerInterface import HomeseerInterface, HomeSeerCommandException
+
 # from .homeseer_interface.HomeseerInterfaceSpoof import HomeseerInterfaceSpoof as HomeseerInterface, \
 #     HomeSeerCommandException
 
-# Each skill is contained within its own class, which inherits base methods
-# from the MycroftSkill class.  You extend this class as shown below.
 
 Device = namedtuple('Device', 'ref name location location2')
 Event = namedtuple('Event', 'group name id')
@@ -82,7 +81,7 @@ class HomeSeerSkill(MycroftSkill):
                 best_device = device
 
         return best_device
-    
+
     def get_event_by_attributes(self, detail: str):
         best_score = 0
         score = 0
@@ -150,7 +149,7 @@ class HomeSeerSkill(MycroftSkill):
         setting = message.data["LockSetting"]
         device = self.get_device_by_attributes(detail)
         self.log.info("{}ing {}...".format(setting, detail))
-        self.speak_dialog('Lock', {'setting': setting+"ing",
+        self.speak_dialog('Lock', {'setting': setting,
                                    'name': device.name})
         try:
             self.hs.control_by_label(device.ref, setting + "ed")
@@ -160,7 +159,6 @@ class HomeSeerSkill(MycroftSkill):
     @intent_handler(IntentBuilder("").require("SetDetail"))
     def handle_set_percentage_intent(self, message):
         detail = message.data["SetDetail"]
-        # percent = message.data["Percentage"]
         # Adapt is dumb with `%` characters, so we have to dead-reckon the location of the percentage
         index = message.data["utterance"].rfind("to")
         percent = str(int(extract_number(message.data["utterance"][index:].translate({ord('%'): None}),
@@ -177,7 +175,6 @@ class HomeSeerSkill(MycroftSkill):
     @intent_handler(IntentBuilder("").require("AllKeyword").require("SetDetail"))
     def handle_set_percentage_all_intent(self, message):
         detail = message.data["SetDetail"]
-        # percent = message.data["Percentage"]
         index = message.data["utterance"].rfind("to")
         percent = str(int(extract_number(message.data["utterance"][index:].translate({ord('%'): None}),
                                          short_scale=False)))
@@ -203,17 +200,6 @@ class HomeSeerSkill(MycroftSkill):
         except HomeSeerCommandException as e:
             self.speak_dialog('Error', {'exception': str(e)})
 
-    # The "stop" method defines what Mycroft does when told to stop during
-    # the skill's execution. In this case, since the skill's functionality
-    # is extremely simple, there is no need to override it.  If you DO
-    # need to implement stop, you should return True to indicate you handled
-    # it.
-    #
-    # def stop(self):
-    #    return False
 
-
-# The "create_skill()" method is used to create an instance of the skill.
-# Note that it's outside the class itself.
 def create_skill():
     return HomeSeerSkill()
