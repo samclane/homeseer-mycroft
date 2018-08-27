@@ -1,8 +1,4 @@
 {
   "utterance": "get the status of the lights",
-  "expected_dialog": "DeviceStatus",
-  "intent_type": "handle_get_status_intent",
-  "intent": {
-    "StatusDetail": "lights"
-  }
+  "expected_dialog": "DeviceStatus"
 }
