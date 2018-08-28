@@ -23,7 +23,7 @@ Add the block below to your `mycroft.conf` file:
   }
 ```
 
-Remember to put `null` for username and password if your Homeseer is on the same LAN as your Mycroft.
+Remember to put `null` for username and password if your HomeSeer is on the same LAN as your Mycroft.
 Restart Mycroft for the changes to take effect.
 
 ## Credits 
