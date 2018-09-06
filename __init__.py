@@ -40,8 +40,10 @@ class HomeSeerSkill(MycroftSkill):
 
     def __init__(self):
         super(HomeSeerSkill, self).__init__(name="HomeSeerSkill")
-
-        self.hs = HomeseerInterface(self.config.get('url'), self.config.get('username'), self.config.get('password'))
+        try:
+            self.hs = HomeseerInterface(self.config.get('url'), self.config.get('username'), self.config.get('password'))
+        except Exception:
+            self.hs = None
         self.device_list = []
         self.event_list = []
 
@@ -51,6 +53,11 @@ class HomeSeerSkill(MycroftSkill):
         if self.lang not in supported_languages:
             self.log.warning("Unsupported language ({}) for {}, shutting down skill".format(self.lang, self.name))
             self.shutdown()
+
+        # Not configured, might be test
+        if not self.hs:
+            self.log.warning('HOME SEER IS NOT CONFIGURED AND MIGHT BE WONKY!')
+            return
 
         # Get HomeSeer devices from status query
         try:
