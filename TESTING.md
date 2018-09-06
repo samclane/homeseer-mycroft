@@ -1,6 +1,6 @@
-##homeseer-mycroft
+## homeseer-mycroft
 
-#####Template
+##### Template
 * Platform
     * Which platform is the test being run on? (i.e. Picroft, Mark 1, Linux)
 * Device Version
@@ -13,7 +13,7 @@
     * i.e. "English, Australian" so that we can identify any key language issues
     
     
-#####How to Install  homeseer-mycroft
+##### How to Install  homeseer-mycroft
 * Install via `msm install https://github.com/samclane/homeseer-mycroft.git`
 * All requirements are found in the `requirements.txt` folder
     * Note: `python-Levenshtein` is included in order to speed-up `fuzzywuzzy`. It is not required but is very nice.
@@ -43,7 +43,7 @@ Restart Mycroft for the changes to take effect.
 
 * homseer-mycroft uses Python `requests` to send/receive JSON messages with the HomeSeer server.
 
-#####How to Test  homeseer-mycroft
+##### How to Test  homeseer-mycroft
 To begin, you should have a sense of what devices are connected to the HomeSeer hub. You can do this in your browser, 
 by going to "http://`url`/?user=`username`&pass=`password`&request=getstatus". Note, you only need to add the username
 and password if you're connecting to a non-local HomeSeer server. 
@@ -176,6 +176,6 @@ verify your command was correctly parsed. If something goes wrong, Mycroft will 
 HomeSeer" followed by an error message. 
 
 
-#####Feedback
+##### Feedback
 Please use the [Github Issues page](https://github.com/samclane/homeseer-mycroft/issues) to report bugs, give feedback,
 and suggest new features (if needed). 
