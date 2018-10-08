@@ -17,7 +17,7 @@
 """
 
 import requests
-from json import JSONDecodeError
+from json import JSONDecodeError, dumps
 from mycroft.util.log import LOG
 
 
@@ -50,7 +50,7 @@ class HomeseerInterface:
                 raise HomeSeerCommandException(website.json()["Response"])
         except JSONDecodeError:
             raise HomeSeerCommandException("Request returned non-JSON result")
-        LOG.info("...Request returned {}".format(website.json()))
+        LOG.info("...Request returned {}".format(dumps(website.json())))
         return website.json()
 
     def get_status(self, ref="", location="", location2=""):
